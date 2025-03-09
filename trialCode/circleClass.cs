@@ -2,11 +2,13 @@ class Circle {
     private int x;
     private int y;
     private int radius;
+
+    private Color color;
+
     public Circle() {
         Random random = new();
-        X = random.Next(1,11);
-        Y = random.Next(1,11);
-        Radius = random.Next(1,3);
+        Radius = random.Next(10,30);
+        Color = Color.Red;
     }
 
     public int X {
@@ -30,6 +32,13 @@ class Circle {
 
         set {
             radius = value;
+        }
+    }
+
+    public Color Color {
+        get {return color;}
+        set {
+            color = value;
         }
     }
 }
