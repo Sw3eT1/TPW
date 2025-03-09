@@ -1,60 +1,69 @@
-using System.Drawing.Drawing2D;
-
 namespace spawnRandomObejcts
 {
     public partial class MyForm : Form
     {
-        private List<PictureBox> balls = new();
+        private List<Circle> balls = new();
+
         private System.Windows.Forms.Timer spawnTimer;
-        private int spawnRate = 20;
+        private System.Windows.Forms.Timer moveTimer;
         private Random rand = new();
 
         public MyForm()
         {
             InitializeComponent();
-            InitializeTimer(); 
+            spawnTimer = new System.Windows.Forms.Timer();
+            moveTimer = new System.Windows.Forms.Timer();
+            InitializeSpawnTimer(); 
         }
 
-        private void InitializeTimer()
+        private void InitializeSpawnTimer()
         {
-            spawnTimer = new System.Windows.Forms.Timer();
-            spawnTimer.Interval = 500; 
+            spawnTimer.Interval = 200; 
             spawnTimer.Tick += TimerEvent;
             spawnTimer.Start();
         }
 
+        private void InitializeMoveTimer()
+        {
+            moveTimer.Interval = 16; 
+            moveTimer.Tick += MoveBalls;
+            moveTimer.Start();
+        }
+
         private void TimerEvent(object sender, EventArgs e)
         {
-            if (spawnRate > 0)
+            if (balls.Count < 10)
             {
                 MakeNewBall();
-                spawnRate--;
             }
             else
             {
-                spawnTimer.Stop();
+                spawnTimer.Stop(); 
+                InitializeMoveTimer(); 
             }
         }
 
         public void MakeNewBall()
         {
-            Circle circle1 = new();
-            PictureBox newBall = new();
-            GraphicsPath path = new();
+            Circle circle = new(rand, ClientSize.Width, ClientSize.Height);
+            balls.Add(circle);
+            Controls.Add(circle.PictureBox);
+        }
 
-            newBall.Height = circle1.Radius;
-            newBall.Width = circle1.Radius;
-            newBall.BackColor = circle1.Color;
+        private void MoveBalls(object sender, EventArgs e)
+        {
+            for (int i = 0; i < balls.Count; i++)
+            {
+                balls[i].Move(ClientSize.Width, ClientSize.Height);
 
-            circle1.X = rand.Next(10, ClientSize.Width - newBall.Width);
-            circle1.Y = rand.Next(10, ClientSize.Height - newBall.Height);
-
-            newBall.Location = new Point(circle1.X, circle1.Y);
-            path.AddEllipse(0, 0, newBall.Width, newBall.Height);
-            newBall.Region = new Region(path);
-
-            balls.Add(newBall);
-            Controls.Add(newBall);
+                for (int j = i + 1; j < balls.Count; j++)
+                {
+                    if (balls[i].CheckCollision(balls[j]))
+                    {
+                        balls[i].ResolveCollision(balls[j]);
+                    }
+                }
+            }
         }
     }
 }
