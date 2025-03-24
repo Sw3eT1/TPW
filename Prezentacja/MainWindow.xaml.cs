@@ -13,30 +13,45 @@ namespace Prezentacja
     {
         private List<BallLogic> balls = new();
         private Random rand = new();
-        private DispatcherTimer spawnTimer;
         private DispatcherTimer moveTimer;
+        private int ballCount;
 
         public MainWindow()
         {
             InitializeComponent();
-            spawnTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
-            spawnTimer.Tick += SpawnBall;
-            spawnTimer.Start();
         }
 
-        private void SpawnBall(object sender, EventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            if (balls.Count < 10)
+            if (int.TryParse(BallCountTextBox.Text, out ballCount))
+            {
+                ClearBalls();
+                SpawnBalls();
+                if (moveTimer == null)
+                {
+                    StartMoveTimer();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Nieprawidłowa liczba kulek.");
+            }
+        }
+
+        private void SpawnBalls()
+        {
+            for (int i = 0; i < ballCount; i++)
             {
                 BallLogic ball = new(rand, (int)MainCanvas.ActualWidth, (int)MainCanvas.ActualHeight);
                 balls.Add(ball);
                 CreateBallShape(ball);
             }
-            else
-            {
-                spawnTimer.Stop();
-                StartMoveTimer();
-            }
+        }
+
+        private void ClearBalls()
+        {
+            MainCanvas.Children.Clear();
+            balls.Clear();
         }
 
         private void CreateBallShape(BallLogic ball)
