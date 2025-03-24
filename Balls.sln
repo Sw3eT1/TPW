@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dane", "Dane\Dane.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logika", "Logika\Logika.csproj", "{F15A37A9-8F09-451F-9267-92A6C714419D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{CF72D0EF-0F16-416B-86A7-7AD218C2DD51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +29,15 @@ Global
 		{F15A37A9-8F09-451F-9267-92A6C714419D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F15A37A9-8F09-451F-9267-92A6C714419D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F15A37A9-8F09-451F-9267-92A6C714419D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF72D0EF-0F16-416B-86A7-7AD218C2DD51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF72D0EF-0F16-416B-86A7-7AD218C2DD51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF72D0EF-0F16-416B-86A7-7AD218C2DD51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF72D0EF-0F16-416B-86A7-7AD218C2DD51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF7D7077-A72E-4496-87CD-0AD6593EE8AF}
 	EndGlobalSection
 EndGlobal
