@@ -11,21 +11,8 @@ namespace Logika
 
     public class BallLogic
     {
-        public BallData Data { get; private set; }
+        public IShape Data { get; set; }
 
-        public BallLogic(Random random, int maxWidth, int maxHeight)
-        {
-            double radius = random.Next(20, 50);
-            Data = new BallData
-            {
-                X = random.Next(10, maxWidth - (int)radius),
-                Y = random.Next(10, maxHeight - (int)radius),
-                Radius = radius,
-                MovX = random.Next(2, 5) * (random.Next(2) == 0 ? 1 : -1),
-                MovY = random.Next(2, 5) * (random.Next(2) == 0 ? 1 : -1),
-                Color = Color.FromArgb((byte)random.Next(256), (byte)random.Next(256), (byte)random.Next(256))
-            };
-        }
 
         public void Move(int maxWidth, int maxHeight)
         {

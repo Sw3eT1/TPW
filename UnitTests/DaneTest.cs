@@ -11,7 +11,7 @@ namespace UnitTests
         [Test]
         public void BallData_SetAndGetTests()
         {
-            BallData ballData = new BallData();
+            IShape ballData = new BallData();
             double x = 10;
             double y = 20;
             double radius = 30;

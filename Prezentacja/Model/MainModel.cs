@@ -4,6 +4,7 @@ using System.Windows.Threading;
 using Logika;
 using System.Windows.Media;
 using Prezentacja.ViewModel;
+using Dane;
 
 namespace Prezentacja.Model
 {
@@ -43,11 +44,13 @@ namespace Prezentacja.Model
         {
             for (int i = 0; i < count; i++)
             {
-                var logic = new BallLogic(rand, width, height);
+                IShape data = BallData.CreateRandomShape(width, height);
+                var logic = new BallLogic { Data = data as BallData };
                 var ballVM = new BallViewModel(logic);
                 balls.Add(ballVM);
             }
         }
+
 
 
         private void MoveBalls(object sender, EventArgs e)
