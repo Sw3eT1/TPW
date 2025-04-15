@@ -13,8 +13,7 @@ namespace Dane
         double Y { get; set; }
         double MovX { get; set; }
         double MovY { get; set; }
-        double Radius { get; }
-
-        //IShape ShapeData(int maxWidth, int maxHeight);
+        double Radius { get; set; }
+       
     }
 }

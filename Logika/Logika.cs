@@ -13,6 +13,11 @@ namespace Logika
     {
         public IShape Data { get; set; }
 
+        public BallLogic(int width, int height)
+        {
+            Data = BallData.CreateRandomShape(width, height);
+        }
+
         public BallLogic(IShape shape)
         {
             Data = shape;

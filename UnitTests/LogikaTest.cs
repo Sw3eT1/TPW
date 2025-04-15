@@ -18,7 +18,7 @@ namespace UnitTests
     public class BallLogicTests
     {
         private IShape shape;
-        private BallLogic logic;
+        private ILogic logic;
 
         [SetUp]
         public void Setup()

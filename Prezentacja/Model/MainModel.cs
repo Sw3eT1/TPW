@@ -48,10 +48,9 @@ namespace Prezentacja.Model
 
             for (int i = 0; i < count; i++)
             {
-                IShape data = BallData.CreateRandomShape(width, height);
-                ILogic logic = new BallLogic(data);
+                ILogic logic = new BallLogic(width, height); 
                 logics.Add(logic);
-                var ballVM = new BallViewModel(logic.Data.X,logic.Data.Y, logic.Data.Radius);
+                var ballVM = new BallViewModel(logic.Data.X, logic.Data.Y, logic.Data.Radius);
                 balls.Add(ballVM);
             }
         }
