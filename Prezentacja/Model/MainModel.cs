@@ -15,6 +15,7 @@ namespace Prezentacja.Model
         private Random rand = new Random();
         private int width;
         private int height;
+        private List<ILogic> logics = new();
         private DispatcherTimer moveTimer;
 
         public MainModel()
@@ -42,11 +43,15 @@ namespace Prezentacja.Model
 
         private void SpawnBalls(int count)
         {
+            balls.Clear();
+            logics.Clear();
+
             for (int i = 0; i < count; i++)
             {
                 IShape data = BallData.CreateRandomShape(width, height);
-                ILogic logic = new BallLogic { Data = data as BallData };
-                var ballVM = new BallViewModel(logic);
+                ILogic logic = new BallLogic(data);
+                logics.Add(logic);
+                var ballVM = new BallViewModel(logic.Data.X,logic.Data.Y, logic.Data.Radius);
                 balls.Add(ballVM);
             }
         }
@@ -55,10 +60,10 @@ namespace Prezentacja.Model
 
         private void MoveBalls(object sender, EventArgs e)
         {
-            foreach (var ball in balls)
+           for(int i = 0; i< logics.Count; i++)
             {
-                ball.Logic.Move(width, height);
-                ball.Update();
+                logics[i].Move(width, height);
+                balls[i].UpdatePosition(logics[i].Data.X, logics[i].Data.Y);
             }
 
             CheckCollisions();
@@ -67,13 +72,13 @@ namespace Prezentacja.Model
 
         private void CheckCollisions()
         {
-            for (int i = 0; i < balls.Count; i++)
+            for (int i = 0; i < logics.Count; i++)
             {
-                for (int j = i + 1; j < balls.Count; j++)
+                for (int j = i + 1; j < logics.Count; j++)
                 {
-                    if (balls[i].Logic.CheckCollision(balls[j].Logic))
+                    if (logics[i].CheckCollision(logics[j]))
                     {
-                        balls[i].Logic.ResolveCollision(balls[j].Logic);
+                        logics[i].ResolveCollision(logics[j]);
                     }
                 }
             }

@@ -13,6 +13,10 @@ namespace Logika
     {
         public IShape Data { get; set; }
 
+        public BallLogic(IShape shape)
+        {
+            Data = shape;
+        }
 
         public void Move(int maxWidth, int maxHeight)
         {

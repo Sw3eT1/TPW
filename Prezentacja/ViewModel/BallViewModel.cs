@@ -1,29 +1,44 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Logika;
 
 namespace Prezentacja.ViewModel
 {
     public class BallViewModel : INotifyPropertyChanged
     {
-        private ILogic ball;
+        private double x;
+        private double y;
+        private double radius;
 
-        public double X => ball.Data.X;
-        public double Y => ball.Data.Y;
-        public double Radius => ball.Data.Radius;
-
-        public BallViewModel(ILogic ball)
+        public double X
         {
-            this.ball = ball;
+            get => x;
+            set { x = value; OnPropertyChanged(); }
         }
 
-        public void Update()
+        public double Y
         {
-            OnPropertyChanged(nameof(X));
-            OnPropertyChanged(nameof(Y));
+            get => y;
+            set { y = value; OnPropertyChanged(); }
         }
 
-        public ILogic Logic => ball;
+        public double Radius
+        {
+            get => radius;
+            set { radius = value; OnPropertyChanged(); }
+        }
+
+        public BallViewModel(double x, double y, double radius)
+        {
+            X = x;
+            Y = y;
+            Radius = radius;
+        }
+
+        public void UpdatePosition(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -1,37 +1,58 @@
-﻿using System.Drawing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Logika;
+using Dane;
 using NUnit.Framework.Legacy;
 
 namespace UnitTests
 {
-    [TestFixture]
-    public class LogikaTest
+    public class TestShape : IShape
     {
-        private Random random;
-        private int maxWidth;
-        private int maxHeight;
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Radius { get; set; }
+        public double MovX { get; set; }
+        public double MovY { get; set; }
+    }
+
+    [TestFixture]
+    public class BallLogicTests
+    {
+        private IShape shape;
+        private BallLogic logic;
 
         [SetUp]
         public void Setup()
         {
-            random = new Random(1);
-            maxWidth = 100;
-            maxHeight = 100;
+            shape = new TestShape
+            {
+                X = 10,
+                Y = 10,
+                Radius = 20,
+                MovX = 2,
+                MovY = 3
+            };
+
+            logic = new BallLogic(shape);
         }
 
         [Test]
-        public void BallLogic_ConstructorTests()
+        public void BallLogic_Move_UpdatesPositionCorrectly()
         {
-            BallLogic ballLogic = new BallLogic(random, maxWidth, maxHeight);
+            logic.Move(100, 100);
 
-            ClassicAssert.IsNotNull(ballLogic.Data);
-            ClassicAssert.IsTrue(ballLogic.Data.X >= 10 && ballLogic.Data.X <= maxWidth);
-            ClassicAssert.IsTrue(ballLogic.Data.Y >= 10 && ballLogic.Data.Y <= maxHeight);
-            ClassicAssert.IsTrue(ballLogic.Data.Radius >= 20 && ballLogic.Data.Radius <= 50);
-            ClassicAssert.IsTrue(ballLogic.Data.MovX >= -5 && ballLogic.Data.MovX <= 5);
-            ClassicAssert.IsTrue(ballLogic.Data.MovY >= -5 && ballLogic.Data.MovY <= 5);
-            ClassicAssert.IsNotNull(ballLogic.Data.Color);
+            ClassicAssert.AreEqual(12, shape.X);
+            ClassicAssert.AreEqual(13, shape.Y);
+        }
+
+        [Test]
+        public void BallLogic_Move_BouncesOffWalls()
+        {
+            shape.X = 95;
+            shape.MovX = 10;
+
+            logic.Move(100, 100);
+
+            ClassicAssert.Less(shape.MovX, 0);
         }
     }
 }
