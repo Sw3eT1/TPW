@@ -6,13 +6,13 @@ namespace Prezentacja.ViewModel
 {
     public class BallViewModel : INotifyPropertyChanged
     {
-        private BallLogic ball;
+        private ILogic ball;
 
         public double X => ball.Data.X;
         public double Y => ball.Data.Y;
         public double Radius => ball.Data.Radius;
 
-        public BallViewModel(BallLogic ball)
+        public BallViewModel(ILogic ball)
         {
             this.ball = ball;
         }
@@ -23,7 +23,7 @@ namespace Prezentacja.ViewModel
             OnPropertyChanged(nameof(Y));
         }
 
-        public BallLogic Logic => ball;
+        public ILogic Logic => ball;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)

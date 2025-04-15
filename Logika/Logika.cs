@@ -9,7 +9,7 @@ using Dane;
 namespace Logika
 {
 
-    public class BallLogic
+    public class BallLogic : ILogic
     {
         public IShape Data { get; set; }
 
@@ -23,7 +23,7 @@ namespace Logika
             if (Data.Y <= 0 || Data.Y + Data.Radius >= maxHeight) Data.MovY = -Data.MovY;
         }
 
-        public bool CheckCollision(BallLogic obj)
+        public bool CheckCollision(ILogic obj)
         {
             double dx = (Data.X + Data.Radius / 2) - (obj.Data.X + obj.Data.Radius / 2);
             double dy = (Data.Y + Data.Radius / 2) - (obj.Data.Y + obj.Data.Radius / 2);
@@ -32,7 +32,7 @@ namespace Logika
             return distance <= minDistance;
         }
 
-        public void ResolveCollision(BallLogic obj)
+        public void ResolveCollision(ILogic obj)
         {
             double dx = (Data.X + Data.Radius / 2) - (obj.Data.X + obj.Data.Radius / 2);
             double dy = (Data.Y + Data.Radius / 2) - (obj.Data.Y + obj.Data.Radius / 2);

@@ -45,7 +45,7 @@ namespace Prezentacja.Model
             for (int i = 0; i < count; i++)
             {
                 IShape data = BallData.CreateRandomShape(width, height);
-                var logic = new BallLogic { Data = data as BallData };
+                ILogic logic = new BallLogic { Data = data as BallData };
                 var ballVM = new BallViewModel(logic);
                 balls.Add(ballVM);
             }

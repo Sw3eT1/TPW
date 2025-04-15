@@ -13,7 +13,6 @@ namespace Dane
         public double Radius { get; set; }
         public Color Color { get; set; }
 
-        // ⬇⬇⬇ TUTAJ wstaw tę metodę ⬇⬇⬇
         public static IShape CreateRandomShape(int maxWidth, int maxHeight)
         {
             double radius = random.Next(20, 50);
