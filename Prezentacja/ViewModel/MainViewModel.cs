@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Prezentacja.Model;
 using Prezentacja.Commands;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace Prezentacja.ViewModel
 {
@@ -12,14 +13,23 @@ namespace Prezentacja.ViewModel
     {
         private MainModel model;
         private int ballCount;
+        private const int MaxBallCount = 1000;
 
         public int BallCount
         {
             get { return ballCount; }
             set
             {
-                ballCount = value;
-                OnPropertyChanged();
+                if (value <= MaxBallCount)
+                {
+                    ballCount = value;
+                    OnPropertyChanged();
+                }
+                else
+                {
+                    ballCount = MaxBallCount;
+                    OnPropertyChanged();
+                }
             }
         }
 
@@ -30,7 +40,7 @@ namespace Prezentacja.ViewModel
 
         public MainViewModel()
         {
-            model = new MainModel();
+            model = new MainModel(Dispatcher.CurrentDispatcher);
             ballCount = 10;
             StartCommand = new Command(StartSimulation);
         }
@@ -39,7 +49,7 @@ namespace Prezentacja.ViewModel
         {
             if (parameter is FrameworkElement element)
             {
-                model.StartSimulation(ballCount, (int)element.ActualWidth, (int)element.ActualHeight);
+                model.StartSimulation(ballCount, (int)element.ActualWidth, (int)element.ActualHeight, Dispatcher.CurrentDispatcher);
             }
         }
 

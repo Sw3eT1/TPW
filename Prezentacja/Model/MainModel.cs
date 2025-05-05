@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 using Logika;
 using System.Windows.Media;
 using Prezentacja.ViewModel;
@@ -17,16 +18,19 @@ namespace Prezentacja.Model
         private int height;
         private List<ILogic> logics = new();
         private DispatcherTimer moveTimer;
+        private Dispatcher dispatcher;
 
-        public MainModel()
+        public MainModel(Dispatcher dispatcher)
         {
+            this.dispatcher = dispatcher;
             balls = new ObservableCollection<BallViewModel>();
             moveTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(20) };
             moveTimer.Tick += MoveBalls;
         }
 
-        public void StartSimulation(int ballCount, int width, int height)
+        public void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
         {
+            this.dispatcher = dispatcher;
             balls.Clear();
             this.width = width;
             this.height = height;
@@ -57,15 +61,21 @@ namespace Prezentacja.Model
 
 
 
-        private void MoveBalls(object sender, EventArgs e)
+        private async void MoveBalls(object sender, EventArgs e)
         {
-           for(int i = 0; i< logics.Count; i++)
+            await Task.Run(() =>
             {
-                logics[i].Move(width, height);
-                balls[i].UpdatePosition(logics[i].Data.X, logics[i].Data.Y);
-            }
+                for (int i = 0; i < logics.Count; i++)
+                {
+                    logics[i].Move(width, height);
+                    dispatcher.Invoke(() => balls[i].UpdatePosition(logics[i].Data.X, logics[i].Data.Y));
+                }
+            });
 
-            CheckCollisions();
+            await Task.Run(() =>
+            {
+                CheckCollisions();
+            });
         }
 
 
