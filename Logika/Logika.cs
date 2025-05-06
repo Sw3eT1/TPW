@@ -23,13 +23,9 @@ namespace Logika
             Data = shape;
         }
 
-        public void Move(int maxWidth, int maxHeight)
+        public void SimulateMove(int maxWidth, int maxHeight)
         {
-            Data.X += Data.MovX;
-            Data.Y += Data.MovY;
-
-            if (Data.X <= 0 || Data.X + Data.Radius >= maxWidth) Data.MovX = -Data.MovX;
-            if (Data.Y <= 0 || Data.Y + Data.Radius >= maxHeight) Data.MovY = -Data.MovY;
+            Data.Move(maxWidth, maxHeight);
         }
 
         public bool CheckCollision(ILogic obj)
@@ -48,7 +44,7 @@ namespace Logika
             double distance = Math.Sqrt(dx * dx + dy * dy);
 
             double minDistance = (Data.Radius / 2 + obj.Data.Radius / 2) * 1.1;
-            if (distance < minDistance)
+            if (distance < minDistance && distance != 0)
             {
                 double overlap = minDistance - distance;
                 double pushX = dx / distance * (overlap / 2);
@@ -58,14 +54,36 @@ namespace Logika
                 Data.Y += pushY;
                 obj.Data.X -= pushX;
                 obj.Data.Y -= pushY;
-            }
 
-            double tempMovX = Data.MovX;
-            double tempMovY = Data.MovY;
-            Data.MovX = obj.Data.MovX;
-            Data.MovY = obj.Data.MovY;
-            obj.Data.MovX = tempMovX;
-            obj.Data.MovY = tempMovY;
+                // Jednostkowy wektor kolizji
+                double nx = dx / distance;
+                double ny = dy / distance;
+
+                // Składowe prędkości w kierunku kolizji
+                double dvx = Data.MovX - obj.Data.MovX;
+                double dvy = Data.MovY - obj.Data.MovY;
+
+                double dot = dvx * nx + dvy * ny;
+
+                if (dot > 0) return; // Kule już się oddalają
+
+                double m1 = Data.Mass;
+                double m2 = obj.Data.Mass;
+
+                // Współczynnik sprężystości 1 (sprężysta kolizja)
+                double coefficient = 1;
+
+                // Oblicz impuls
+                double impulse = (2 * dot) / (m1 + m2);
+
+                // Zastosuj zmianę prędkości na podstawie masy i impulsu
+                Data.MovX -= impulse * m2 * nx;
+                Data.MovY -= impulse * m2 * ny;
+
+                obj.Data.MovX += impulse * m1 * nx;
+                obj.Data.MovY += impulse * m1 * ny;
+            }
         }
+
     }
 }

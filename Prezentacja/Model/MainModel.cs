@@ -67,7 +67,7 @@ namespace Prezentacja.Model
             {
                 for (int i = 0; i < logics.Count; i++)
                 {
-                    logics[i].Move(width, height);
+                    logics[i].SimulateMove(width, height);
                     dispatcher.Invoke(() => balls[i].UpdatePosition(logics[i].Data.X, logics[i].Data.Y));
                 }
             });

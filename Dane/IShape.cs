@@ -15,6 +15,8 @@ namespace Dane
         double MovY { get; set; }
         double Radius { get; set; }
         double Mass { get; set; }
-
+        public void Move(int maxWidth, int maxHeight)
+        {
+        }
     }
 }

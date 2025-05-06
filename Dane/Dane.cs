@@ -4,7 +4,6 @@ namespace Dane
 {
     public class BallData : IShape
     {
-            private static readonly Random random = new Random();
             private readonly object positionLock = new object();
 
             private double x;
@@ -64,7 +63,7 @@ namespace Dane
                 double radius = minRadius + (maxRadius - minRadius) * ((mass - minMass) / (maxMass - minMass));
 
                 double baseSpeed = 8;
-                double speedFactor = 2.0 / mass; 
+                double speedFactor = 1.0 / mass; 
 
                 double initialMovX = baseSpeed * localRandom.NextDouble() * speedFactor * (localRandom.Next(2) == 0 ? 1 : -1);
                 double initialMovY = baseSpeed * localRandom.NextDouble() * speedFactor * (localRandom.Next(2) == 0 ? 1 : -1);

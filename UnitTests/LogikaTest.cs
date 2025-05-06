@@ -38,7 +38,7 @@ namespace UnitTests
         [Test]
         public void BallLogic_Move_UpdatesPositionCorrectly()
         {
-            logic.Move(100, 100);
+            logic.SimulateMove(100, 100);
 
             ClassicAssert.AreEqual(12, shape.X);
             ClassicAssert.AreEqual(13, shape.Y);
@@ -50,7 +50,7 @@ namespace UnitTests
             shape.X = 95;
             shape.MovX = 10;
 
-            logic.Move(100, 100);
+            logic.SimulateMove(100, 100);
 
             ClassicAssert.Less(shape.MovX, 0);
         }

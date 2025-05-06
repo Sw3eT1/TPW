@@ -11,7 +11,7 @@ namespace Logika
     public interface ILogic
     {
         IShape Data { get; }
-        void Move(int maxWidth, int maxHeight);
+        void SimulateMove(int maxWidth, int maxHeight);
         bool CheckCollision(ILogic other);
         void ResolveCollision(ILogic other);
     }
