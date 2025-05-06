@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dane
+﻿namespace Dane
 {
     public interface IShape
     {
@@ -18,5 +11,8 @@ namespace Dane
         public void Move(int maxWidth, int maxHeight)
         {
         }
+        public event Action<double, double> PositionChanged;
+        public void Start();
+        public void Stop();
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
-using System.Threading.Tasks;
 using Logika;
-using System.Windows.Media;
 using Prezentacja.ViewModel;
-using Dane;
+
 
 namespace Prezentacja.Model
 {
@@ -13,36 +10,38 @@ namespace Prezentacja.Model
     {
         private ObservableCollection<BallViewModel> balls;
         public ObservableCollection<BallViewModel> Balls => balls;
-        private Random rand = new Random();
         private int width;
         private int height;
         private List<ILogic> logics = new();
-        private DispatcherTimer moveTimer;
         private Dispatcher dispatcher;
+        private CancellationTokenSource simulationTokenSource;
 
         public MainModel(Dispatcher dispatcher)
         {
             this.dispatcher = dispatcher;
             balls = new ObservableCollection<BallViewModel>();
-            moveTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(20) };
-            moveTimer.Tick += MoveBalls;
         }
 
-        public void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
+        public async void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
         {
-            this.dispatcher = dispatcher;
             balls.Clear();
             this.width = width;
             this.height = height;
             SpawnBalls(ballCount);
-            moveTimer.Start();
 
-        }
+            simulationTokenSource = new CancellationTokenSource();
+            var token = simulationTokenSource.Token;
 
-        public void StopSimulation()
-        {
-            moveTimer.Stop();
-            balls.Clear();
+            foreach (var logic in logics)
+            {
+                logic.SimulateMove(width, height);
+            }
+
+                while (!token.IsCancellationRequested)
+                {
+                    CheckCollisions();
+                    await Task.Delay(20);
+                }
         }
 
         private void SpawnBalls(int count)
@@ -52,32 +51,31 @@ namespace Prezentacja.Model
 
             for (int i = 0; i < count; i++)
             {
-                ILogic logic = new BallLogic(width, height); 
+                ILogic logic = new BallLogic(width, height);
                 logics.Add(logic);
+
                 var ballVM = new BallViewModel(logic.Data.X, logic.Data.Y, logic.Data.Radius);
                 balls.Add(ballVM);
+
+                logic.Data.PositionChanged += (x, y) =>
+                {
+                    dispatcher.Invoke(() => ballVM.UpdatePosition(x, y));
+                };
             }
         }
 
-
-
-        private async void MoveBalls(object sender, EventArgs e)
+        public void StopSimulation()
         {
-            await Task.Run(() =>
-            {
-                for (int i = 0; i < logics.Count; i++)
-                {
-                    logics[i].SimulateMove(width, height);
-                    dispatcher.Invoke(() => balls[i].UpdatePosition(logics[i].Data.X, logics[i].Data.Y));
-                }
-            });
+            simulationTokenSource?.Cancel();
 
-            await Task.Run(() =>
+            foreach (var logic in logics)
             {
-                CheckCollisions();
-            });
+                logic.Data?.Stop();
+            }
+
+            balls.Clear();
+            logics.Clear();
         }
-
 
         private void CheckCollisions()
         {

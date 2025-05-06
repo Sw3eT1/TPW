@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dane;
+﻿using Dane;
 
 namespace Logika
 {
@@ -25,7 +19,7 @@ namespace Logika
 
         public void SimulateMove(int maxWidth, int maxHeight)
         {
-            Data.Move(maxWidth, maxHeight);
+            Data.Start();
         }
 
         public bool CheckCollision(ILogic obj)
@@ -55,28 +49,23 @@ namespace Logika
                 obj.Data.X -= pushX;
                 obj.Data.Y -= pushY;
 
-                // Jednostkowy wektor kolizji
                 double nx = dx / distance;
                 double ny = dy / distance;
 
-                // Składowe prędkości w kierunku kolizji
                 double dvx = Data.MovX - obj.Data.MovX;
                 double dvy = Data.MovY - obj.Data.MovY;
 
                 double dot = dvx * nx + dvy * ny;
 
-                if (dot > 0) return; // Kule już się oddalają
+                if (dot > 0) return;
 
                 double m1 = Data.Mass;
                 double m2 = obj.Data.Mass;
 
-                // Współczynnik sprężystości 1 (sprężysta kolizja)
                 double coefficient = 1;
 
-                // Oblicz impuls
                 double impulse = (2 * dot) / (m1 + m2);
 
-                // Zastosuj zmianę prędkości na podstawie masy i impulsu
                 Data.MovX -= impulse * m2 * nx;
                 Data.MovY -= impulse * m2 * ny;
 
