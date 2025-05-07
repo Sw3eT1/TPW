@@ -19,7 +19,7 @@ namespace Logika
 
         public void SimulateMove(int maxWidth, int maxHeight)
         {
-            Data.Start();
+            Data.Start(maxWidth, maxHeight);
         }
 
         public bool CheckCollision(ILogic obj)

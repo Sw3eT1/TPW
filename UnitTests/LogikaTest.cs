@@ -9,9 +9,13 @@ namespace UnitTests
     {
         public double X { get; set; }
         public double Y { get; set; }
-        public double Radius { get; set; }
         public double MovX { get; set; }
         public double MovY { get; set; }
+        public double Radius { get; set; }
+        public double Mass { get; set; }
+        public event Action<double, double> PositionChanged;
+        public void Start(int maxWidth, int maxHeight) { }
+        public void Stop() { }
     }
 
     [TestFixture]
@@ -23,13 +27,14 @@ namespace UnitTests
         [SetUp]
         public void Setup()
         {
-            shape = new TestShape
+            shape = new BallData
             {
                 X = 10,
                 Y = 10,
                 Radius = 20,
                 MovX = 2,
-                MovY = 3
+                MovY = 3,
+                Mass = 3,
             };
 
             logic = new BallLogic(shape);
@@ -38,7 +43,7 @@ namespace UnitTests
         [Test]
         public void BallLogic_Move_UpdatesPositionCorrectly()
         {
-            logic.SimulateMove(100, 100);
+            shape.Move(100, 100);
 
             ClassicAssert.AreEqual(12, shape.X);
             ClassicAssert.AreEqual(13, shape.Y);
@@ -50,7 +55,7 @@ namespace UnitTests
             shape.X = 95;
             shape.MovX = 10;
 
-            logic.SimulateMove(100, 100);
+            shape.Move(100, 100);
 
             ClassicAssert.Less(shape.MovX, 0);
         }

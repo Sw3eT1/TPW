@@ -12,7 +12,7 @@
         {
         }
         public event Action<double, double> PositionChanged;
-        public void Start();
+        public void Start(int maxWidth, int maxHeight);
         public void Stop();
     }
 }

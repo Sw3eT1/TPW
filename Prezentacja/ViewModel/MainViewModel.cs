@@ -13,7 +13,7 @@ namespace Prezentacja.ViewModel
     {
         private MainModel model;
         private int ballCount;
-        private const int MaxBallCount = 100;
+        private const int MaxBallCount = 50;
 
         public int BallCount
         {

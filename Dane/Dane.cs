@@ -69,7 +69,7 @@ namespace Dane
             return ball;
         }
 
-        public void Start()
+        public void Start(int maxWidth, int maxHeight)
         {
             if (movementTask != null && !movementTask.IsCompleted) return;
 
@@ -113,7 +113,7 @@ namespace Dane
                         throw;
                     }
                 }
-
+                
                 cancellationTokenSource.Dispose();
                 cancellationTokenSource = null;
                 movementTask = null;

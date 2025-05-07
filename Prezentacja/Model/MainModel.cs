@@ -22,7 +22,7 @@ namespace Prezentacja.Model
             balls = new ObservableCollection<BallViewModel>();
         }
 
-        public async void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
+        public void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
         {
             balls.Clear();
             this.width = width;
@@ -36,12 +36,6 @@ namespace Prezentacja.Model
             {
                 logic.SimulateMove(width, height);
             }
-
-                while (!token.IsCancellationRequested)
-                {
-                    CheckCollisions();
-                    await Task.Delay(20);
-                }
         }
 
         private void SpawnBalls(int count)
@@ -60,6 +54,7 @@ namespace Prezentacja.Model
                 logic.Data.PositionChanged += (x, y) =>
                 {
                     dispatcher.Invoke(() => ballVM.UpdatePosition(x, y));
+                    CheckCollisions();
                 };
             }
         }
@@ -77,19 +72,24 @@ namespace Prezentacja.Model
             logics.Clear();
         }
 
+        private readonly object collisionLock = new();
         private void CheckCollisions()
         {
-            for (int i = 0; i < logics.Count; i++)
+            lock (collisionLock)
             {
-                for (int j = i + 1; j < logics.Count; j++)
+                for (int i = 0; i < logics.Count; i++)
                 {
-                    if (logics[i].CheckCollision(logics[j]))
+                    for (int j = i + 1; j < logics.Count; j++)
                     {
-                        logics[i].ResolveCollision(logics[j]);
+                        if (logics[i].CheckCollision(logics[j]))
+                        {
+                            logics[i].ResolveCollision(logics[j]);
+                        }
                     }
                 }
             }
         }
+
 
     }
 }
