@@ -33,44 +33,54 @@ namespace Logika
 
         public void ResolveCollision(ILogic obj)
         {
-            double dx = (Data.X + Data.Radius / 2) - (obj.Data.X + obj.Data.Radius / 2);
-            double dy = (Data.Y + Data.Radius / 2) - (obj.Data.Y + obj.Data.Radius / 2);
-            double distance = Math.Sqrt(dx * dx + dy * dy);
 
-            double minDistance = (Data.Radius / 2 + obj.Data.Radius / 2) * 1.1;
-            if (distance < minDistance && distance != 0)
+            var first = this;
+            var second = obj;
+
+            lock (first)
             {
-                double overlap = minDistance - distance;
-                double pushX = dx / distance * (overlap / 2);
-                double pushY = dy / distance * (overlap / 2);
+                lock (second)
+                {
+                    double dx = (Data.X + Data.Radius / 2) - (obj.Data.X + obj.Data.Radius / 2);
+                    double dy = (Data.Y + Data.Radius / 2) - (obj.Data.Y + obj.Data.Radius / 2);
+                    double distance = Math.Sqrt(dx * dx + dy * dy);
 
-                Data.X += pushX;
-                Data.Y += pushY;
-                obj.Data.X -= pushX;
-                obj.Data.Y -= pushY;
+                    double minDistance = (Data.Radius / 2 + obj.Data.Radius / 2) * 1.1;
+                    if (distance < minDistance && distance != 0)
+                    {
+                        double overlap = minDistance - distance;
+                        double pushX = dx / distance * (overlap / 2);
+                        double pushY = dy / distance * (overlap / 2);
 
-                double nx = dx / distance;
-                double ny = dy / distance;
+                        Data.X += pushX;
+                        Data.Y += pushY;
+                        obj.Data.X -= pushX;
+                        obj.Data.Y -= pushY;
 
-                double dvx = Data.MovX - obj.Data.MovX;
-                double dvy = Data.MovY - obj.Data.MovY;
+                        double nx = dx / distance;
+                        double ny = dy / distance;
 
-                double dot = dvx * nx + dvy * ny;
+                        double dvx = Data.MovX - obj.Data.MovX;
+                        double dvy = Data.MovY - obj.Data.MovY;
 
-                if (dot > 0) return;
+                        double dot = dvx * nx + dvy * ny;
 
-                double m1 = Data.Mass;
-                double m2 = obj.Data.Mass;
+                        if (dot > 0) return;
 
-                double coefficient = 1;
+                        double m1 = Data.Mass;
+                        double m2 = obj.Data.Mass;
 
-                double impulse = (2 * dot) / (m1 + m2);
+                        double coefficient = 1;
 
-                Data.MovX -= impulse * m2 * nx;
-                Data.MovY -= impulse * m2 * ny;
+                        double impulse = (2 * dot) / (m1 + m2);
 
-                obj.Data.MovX += impulse * m1 * nx;
-                obj.Data.MovY += impulse * m1 * ny;
+                        Data.MovX -= impulse * m2 * nx;
+                        Data.MovY -= impulse * m2 * ny;
+
+                        obj.Data.MovX += impulse * m1 * nx;
+                        obj.Data.MovY += impulse * m1 * ny;
+                    }
+                }
             }
         }
 

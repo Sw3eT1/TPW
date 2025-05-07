@@ -113,7 +113,7 @@ namespace Dane
                         throw;
                     }
                 }
-                
+
                 cancellationTokenSource.Dispose();
                 cancellationTokenSource = null;
                 movementTask = null;
