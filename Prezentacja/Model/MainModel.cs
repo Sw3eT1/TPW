@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Threading;
+using Dane;
 using Logika;
 using Prezentacja.ViewModel;
 
@@ -24,6 +25,10 @@ namespace Prezentacja.Model
 
         public void StartSimulation(int ballCount, int width, int height, Dispatcher dispatcher)
         {
+
+            Logger.Instance.StartLogging();
+            Logger.Instance.Log("--- Simulation Started ---");
+
             balls.Clear();
             this.width = width;
             this.height = height;
@@ -70,6 +75,10 @@ namespace Prezentacja.Model
 
             balls.Clear();
             logics.Clear();
+
+            Logger.Instance.Log("--- Simulation Stopped ---");
+            Logger.Instance.StopLogging();
+
         }
 
         private readonly object collisionLock = new();

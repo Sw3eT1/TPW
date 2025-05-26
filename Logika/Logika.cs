@@ -48,6 +48,8 @@ namespace Logika
                     double minDistance = (Data.Radius / 2 + obj.Data.Radius / 2) * 1.1;
                     if (distance < minDistance && distance != 0)
                     {
+                        Logger.Instance.Log($"Collision: Ball at X={Data.X:F2},Y={Data.Y:F2} collided with Ball at X={obj.Data.X:F2},Y={obj.Data.Y:F2}");
+
                         double overlap = minDistance - distance;
                         double pushX = dx / distance * (overlap / 2);
                         double pushY = dy / distance * (overlap / 2);

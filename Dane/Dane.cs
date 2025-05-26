@@ -66,6 +66,8 @@ namespace Dane
                 maxHeight = maxHeight
             };
 
+            Logger.Instance.Log($"Ball created: X={ball.X:F2}, Y={ball.Y:F2}, Radius={ball.Radius:F2}, Mass={ball.Mass:F2}");
+
             return ball;
         }
 
