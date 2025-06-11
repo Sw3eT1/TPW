@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dane
 {
@@ -64,6 +65,7 @@ namespace Dane
                             if (logQueue.TryDequeue(out string logEntry))
                             {
                                 await writer.WriteLineAsync($"[{DateTime.Now:HH:mm:ss.fff}] {logEntry}");
+                                await writer.FlushAsync();
                             }
                             else
                             {
@@ -81,6 +83,16 @@ namespace Dane
                     }
                 }
             }, token);
+        }
+
+        public static void logMessage(IShape ball)
+        {
+            Logger.Instance.Log($"Ball created: X={ball.X:F2}, Y={ball.Y:F2}, Radius={ball.Radius:F2}, Mass={ball.Mass:F2}");
+        }
+
+        public static void logMessage(IShape ball1, IShape ball2)
+        {
+            Logger.Instance.Log($"Collision: Ball_1 at X={ball1.X:F2},Y={ball1.Y:F2} collided with Ball_2 at X={ball2.X:F2},Y={ball2.Y:F2}");
         }
 
         public void StopLogging()
